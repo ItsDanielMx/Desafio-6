@@ -17,7 +17,7 @@ app.use(express.urlencoded({extended:true}))
 app.use('/content', express.static('./src/public'))
 
 app.engine('handlebars', handlebars.engine())
-app.set('views', './src/views')
+app.set('views', __dirname+'/views')
 app.set('view engine', 'handlebars')
 
 app.get('/', (req, res) => {
