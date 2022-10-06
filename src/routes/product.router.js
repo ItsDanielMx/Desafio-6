@@ -1,12 +1,12 @@
 const express = require('express')
 const router = express.Router()
+const options = require('../config/mysql.config')
 
 const Manager = require('../controllers/product.manger')
-const manager = new Manager()
+const manager = new Manager(options, 'products')
 
 router.get('/', (req, res) => {
-    let result = manager.findById(req.params.id)
-    if (!result) return res.send({error: 'Product was not found'})
+    let result = manager.findAll()
     res.send(result)
 })
 
