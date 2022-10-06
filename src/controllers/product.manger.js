@@ -18,23 +18,38 @@ class ProductManager {
     }
 
     create = (product) => {
-        return []
+        database('products').insert(product)
+            .then((result) => console.log(result))
+            .catch(err => console.log(err))
+            .finally(() => database.destroy())
     }
 
     findAll = () => {
-        return []
+        database.from('products').select('*')
+            .then(data => console.log(JSON.parse(JSON.stringify(data))))
+            .catch(err => console.log(err))
+            .finally(() => database.destroy())
     }
 
     findById = (id) => {
-        return {}
+        database.from('products').select('*').where('id', id)
+            .then(data => console.log(JSON.parse(JSON.stringify(data))))
+            .catch(err => console.log(err))
+            .finally(() => database.destroy())
     }
 
     update = (id, product) => {
-        return {}
+        database.from('products').where('id', id).update({product})
+            .then(() => console.log('Product updated!'))
+            .catch(err => console.log(err))
+            .finally(() => database.destroy())
     }
 
     delete = (id) => {
-        return []
+        database.from('products').where('id', id).del()
+            .then(() => console.log('Product deleted!'))
+            .catch(err => console.log(err))
+            .finally(() => database.destroy())
     }
 }
 

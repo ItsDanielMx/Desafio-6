@@ -1,3 +1,7 @@
+const options = require('./options/mysql.config')
+const knex = require('knex')
+
+const database = knex(options)
 let products = [
   {
     id: 1,

@@ -4,7 +4,7 @@ const options = {
         host: "127.0.0.1",
         user: "root",
         password: "",
-        database: "coder_desafio_8"
+        database: "productsSQL"
     }
 }
 
