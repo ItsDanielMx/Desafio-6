@@ -17,10 +17,10 @@ const handleSubmit = (evt, form, route) => {
     })
         .then(response => response.json())
         .then(response => socket.emit('socketEvent', response))
-        .then(() => form.reset())
+        // .then(() => form.reset())
 }
 
-productsForm.addEventListener('submit', (e) => handleSubmit(e, e.target, '/products'))
+productsForm.addEventListener('submit', (e) => handleSubmit(e, e.target.value, '/products'))
 chatForm.addEventListener('submit', (e) => handleSubmit(e, e.target, '/chat'))
 
 socket.on('history', data => {

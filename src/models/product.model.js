@@ -1,4 +1,4 @@
-const options = require('../options/mysql.config')
+const options = require('../config/mysql.config')
 const knex = require('knex')
 
 const database = knex(options)
