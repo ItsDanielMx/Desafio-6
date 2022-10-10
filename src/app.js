@@ -4,9 +4,14 @@ const handlebars = require('express-handlebars')
 const productRouter = require('./routes/product.router')
 const chatRouter = require('./routes/chat.router')
 let products = require('./models/product.model')
+const options = require('./config/mysql.config')
+const knex = require('knex')
 
-const Manager = require('./controllers/chat.manager')
-const manager = new Manager()
+const ProductManager = require('./controllers/product.manger')
+const productManager = new ProductManager(options, 'products')
+
+const ChatManager = require('./controllers/chat.manager')
+const chatManager = new ChatManager()
 
 const app = express()
 const PORT = process.env.PORT || 8080
@@ -27,13 +32,19 @@ app.get('/', (req, res) => {
 app.use('/products', productRouter)
 app.use('/chat', chatRouter)
 
-io.on('connection', socket => {
+io.on('connection', async socket => {
     console.log(`Client ${socket.id} connected...`)
     socket.emit('history', products)
-    manager.findAll().then(result => socket.emit('chatHistory', result))
+    chatManager.findAll().then(result => socket.emit('chatHistory', result))
     socket.on('products', data => {
         io.emit('history', data)
     })
+    socket.on('newProduct', async product => {
+        await productManager.create(product)
+        const productos = await productManager.findAll()
+        io.sockets.emit('products', productos)
+    })
+
     socket.on('chat', data => {
         io.emit('chatHistory', data)
     })
