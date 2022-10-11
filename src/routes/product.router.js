@@ -5,8 +5,8 @@ const options = require('../config/mysql.config')
 const Manager = require('../controllers/product.manger')
 const manager = new Manager(options, 'products')
 
-router.get('/', (req, res) => {
-    let result = manager.findAll()
+router.get('/', async (req, res) => {
+    let result = await manager.findAll()
     res.send(result)
 })
 
@@ -16,9 +16,9 @@ router.get('/:id', (req, res) => {
     res.send(result)
 })
 
-router.post('/', (req, res) => {
+router.post('/', async (req, res) => {
     if (!req.body.title || !req.body.price || !req.body.thumbnail) return res.send({error: 'Data is required'})
-    let result = manager.create(req.body)
+    let result = await manager.create(req.body)
     res.send(result)
 })
 

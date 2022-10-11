@@ -34,10 +34,13 @@ app.use('/chat', chatRouter)
 
 io.on('connection', async socket => {
     console.log(`Client ${socket.id} connected...`)
-    socket.emit('history', products)
+    socket.emit('history', await productManager.findAll())
+
     chatManager.findAll().then(result => socket.emit('chatHistory', result))
-    socket.on('products', data => {
-        io.emit('history', data)
+
+    socket.on('products', async data => {
+        await productManager.create(data)
+        io.sockets.emit('history', await productManager.findAll())
     })
     socket.on('newProduct', async product => {
         await productManager.create(product)
