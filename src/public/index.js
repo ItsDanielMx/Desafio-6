@@ -2,25 +2,18 @@ const socket = io();
 let productsForm = document.getElementById('productsForm')
 let chatForm = document.getElementById('chatForm')
 
-const handleSubmit = (evt, form, route) => {
-    evt.preventDefault()
-    let formData = new FormData(form)
-    let obj = {}
-    formData.forEach((value, key) => obj[key]=value)
-    socketEvent = route.slice(1)
-    fetch(route, {
-        method: "POST",
-        body: JSON.stringify(obj),
-        headers: {
-            "Content-type": "application/json"
-        }
-    })
-        .then(response => response.json())
-        .then(response => socket.emit('socketEvent', response))
-        // .then(() => form.reset())
-}
+productsForm.addEventListener('submit', e => {
+    e.preventDefault()
+    const product = {
+        title: productsForm[0].value,
+        price: productsForm[1].value,
+        thumbnail: productsForm[2].value
+    }
+    console.log(product)
+    socket.emit('newProduct', product);
+    productsForm.reset()
+})
 
-productsForm.addEventListener('submit', (e) => handleSubmit(e, e.target.value, '/products'))
 chatForm.addEventListener('submit', (e) => handleSubmit(e, e.target, '/chat'))
 
 socket.on('history', data => {
